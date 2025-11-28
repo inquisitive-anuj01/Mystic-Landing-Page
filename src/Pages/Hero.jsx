@@ -168,7 +168,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="h-[full] relative font-montserrat text-slate-800 bg-white">
+    <div className="h-[full] relative font-montserrat text-slate-800 bg-white ">
       {/* Injecting Font and Custom CSS Variables */}
     
 

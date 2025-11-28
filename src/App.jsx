@@ -18,7 +18,7 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="w-full overflow-x-hidden">
       <Hero />
       <HealerList />
       <Review />
