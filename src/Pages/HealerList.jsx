@@ -126,7 +126,7 @@ function HealerList() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className='min-h-screen bg-gray-100 pt-16 pb-20 font-sans'>
+    <div className='min-h-screen  mt-10 pb-12 font-sans'>
       
       <div className="container mx-auto px-4 max-w-7xl">
         

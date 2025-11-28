@@ -5,6 +5,8 @@ import Review from "./Pages/Review";
 import Faq from "./Pages/Faq";
 import Footer from "./Pages/Footer";
 import Lenis from "lenis";
+import "./index.css";
+import "./App.css";
 
 function App() {
 
