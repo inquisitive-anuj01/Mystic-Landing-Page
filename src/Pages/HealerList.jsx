@@ -1,217 +1,312 @@
-import React, { useState, useEffect } from 'react';
-import { Star, ArrowRight } from 'lucide-react';
+import React, { useState } from "react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
-// --- 1. DUMMY DATA ---
+// --- 1. UPDATED DUMMY DATA ---
+// Added experience and languages to match your real data requirements
 const dummyHealers = [
-  { id: 1, firstName: "Aarav", lastName: "Sharma", title: "Reiki Healing", price: "2500", time: "60 Mins", rating: "4.9", exp: "5", languages: ["HIN", "ENG"], tags: ["Stress", "Anxiety", "Chakra"] },
-  { id: 2, firstName: "Priya", lastName: "Patel", title: "Tarot Reading", price: "1500", time: "45 Mins", rating: "4.8", exp: "3", languages: ["ENG", "GUJ"], tags: ["Future", "Career", "Love"] },
-  { id: 3, firstName: "Sarah", lastName: "Jenkins", title: "Crystal Healing", price: "3000", time: "90 Mins", rating: "5.0", exp: "8", languages: ["ENG"], tags: ["Balancing", "Energy", "Focus"] },
-  { id: 4, firstName: "Rahul", lastName: "Verma", title: "Pranic Healing", price: "2000", time: "60 Mins", rating: "4.7", exp: "4", languages: ["HIN", "ENG", "PUN"], tags: ["Aura", "Cleansing", "Health"] },
-  { id: 5, firstName: "Emily", lastName: "Wong", title: "Sound Therapy", price: "3500", time: "60 Mins", rating: "4.9", exp: "6", languages: ["ENG", "CHI"], tags: ["Vibration", "Relax", "Sleep"] },
-  { id: 6, firstName: "Vikram", lastName: "Singh", title: "Vedic Astrology", price: "2200", time: "30 Mins", rating: "4.6", exp: "10", languages: ["HIN", "SAN"], tags: ["Planets", "Dasha", "Gemstones"] },
-  { id: 7, firstName: "Anita", lastName: "Desai", title: "Hypnotherapy", price: "4000", time: "90 Mins", rating: "5.0", exp: "12", languages: ["ENG", "HIN"], tags: ["Trauma", "Habits", "Mind"] },
-  { id: 8, firstName: "John", lastName: "Doe", title: "Life Coaching", price: "5000", time: "60 Mins", rating: "4.8", exp: "7", languages: ["ENG"], tags: ["Goals", "Success", "Motivation"] },
-  { id: 9, firstName: "Meera", lastName: "Iyer", title: "Yoga Therapy", price: "1200", time: "60 Mins", rating: "4.9", exp: "4", languages: ["ENG", "TAM"], tags: ["Body", "Flexibility", "Peace"] },
-  { id: 10, firstName: "David", lastName: "Smith", title: "Meditation", price: "1000", time: "45 Mins", rating: "4.7", exp: "2", languages: ["ENG"], tags: ["Mindfulness", "Zen", "Calm"] },
-  { id: 11, firstName: "Sonia", lastName: "Kapoor", title: "Numerology", price: "1800", time: "40 Mins", rating: "4.5", exp: "5", languages: ["HIN", "ENG"], tags: ["Numbers", "Destiny", "Name"] },
-  { id: 12, firstName: "Arjun", lastName: "Reddy", title: "Ayurveda", price: "2800", time: "60 Mins", rating: "4.8", exp: "9", languages: ["TEL", "ENG"], tags: ["Dosha", "Herbs", "Diet"] },
+  {
+    id: 1,
+    firstName: "Aarav",
+    lastName: "Sharma",
+    title: "Reiki Healing",
+    price: "2500",
+    rating: "4.9",
+    experience: "8+ Years",
+    languages: ["ENG", "HIN"],
+    image:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=600",
+    tags: ["Stress Relief", "Anxiety", "Chakra"],
+  },
+  {
+    id: 2,
+    firstName: "Priya",
+    lastName: "Patel",
+    title: "Tarot Reading",
+    price: "1500",
+    rating: "4.8",
+    experience: "5 Years",
+    languages: ["ENG", "GUJ"],
+    image:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=600",
+    tags: ["Future", "Career", "Love"],
+  },
+  {
+    id: 3,
+    firstName: "Sarah",
+    lastName: "Jenkins",
+    title: "Crystal Healing",
+    price: "3000",
+    rating: "5.0",
+    experience: "12 Years",
+    languages: ["ENG"],
+    image:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600",
+    tags: ["Balancing", "Energy Clearing"],
+  },
+  {
+    id: 4,
+    firstName: "Rahul",
+    lastName: "Verma",
+    title: "Pranic Healing",
+    price: "2000",
+    rating: "4.7",
+    experience: "6 Years",
+    languages: ["HIN", "ENG", "PUN"],
+    image:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600",
+    tags: ["Aura Cleanse", "Health"],
+  },
+  {
+    id: 5,
+    firstName: "Emily",
+    lastName: "Wong",
+    title: "Sound Therapy",
+    price: "3500",
+    rating: "4.9",
+    experience: "9 Years",
+    languages: ["ENG", "MAN"],
+    image:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=600",
+    tags: ["Vibration", "Deep Sleep"],
+  },
+  {
+    id: 6,
+    firstName: "Vikram",
+    lastName: "Singh",
+    title: "Vedic Astrology",
+    price: "2200",
+    rating: "4.6",
+    experience: "15+ Years",
+    languages: ["HIN", "ENG"],
+    image:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=600",
+    tags: ["Planetary", "Gemstones"],
+  },
+  {
+    id: 7,
+    firstName: "Anita",
+    lastName: "Desai",
+    title: "Hypnotherapy",
+    price: "4000",
+    rating: "5.0",
+    experience: "10 Years",
+    languages: ["ENG", "HIN", "MAR"],
+    image:
+      "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&q=80&w=600",
+    tags: ["Trauma", "Mindset"],
+  },
+  {
+    id: 8,
+    firstName: "John",
+    lastName: "Doe",
+    title: "Life Coaching",
+    price: "5000",
+    rating: "4.8",
+    experience: "7 Years",
+    languages: ["ENG"],
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600",
+    tags: ["Goals", "Success Mindset"],
+  },
 ];
 
-// --- 2. SINGLE HEALER CARD COMPONENT ---
-const HealerCard = ({ item }) => {
-  const currencySymbol = '₹';
-
+// --- 2. HEALER CARD COMPONENT ---
+const HealerCard = ({ item, isMobile }) => {
   return (
-    <div className="group relative bg-[#fff9f0] border-2 border-black rounded-[25px] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_35px_rgba(0,0,0,0.15)] hover:border-purple-800 flex flex-col h-full cursor-pointer">
-      
-      {/* HEADER VISUAL SECTION */}
-      <div className="relative h-[220px] w-full p-5 flex flex-col justify-end overflow-hidden">
-        {/* Layer 1: Fallback Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-200 via-purple-200 to-indigo-200 z-0"></div>
-        {/* Layer 2: Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent z-10"></div>
+    <div
+      className={`group relative h-full w-full flex flex-col rounded-[20px] p-2 shadow-sm 
+      `}
+    >
+      {/* 1. IMAGE CONTAINER */}
+      <div
+        className={`relative w-full flex-1 overflow-hidden mb-2 
+          rounded-2xl 
+        `}
+      >
+        <img
+          src={item.image}
+          alt={item.firstName}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
 
-        {/* Layer 3: Content */}
-        <div className="relative z-20 w-[70%] flex flex-col gap-1 mt-4">
-          <span className="text-[0.6rem] text-gray-100 uppercase tracking-widest font-semibold">
-            UNLOCK THE POWER OF
-          </span>
-          <h3 className="text-[1.1rem] font-extrabold text-white uppercase leading-tight drop-shadow-md">
-            {item.title}
+        {/* BOTTOM DARK GRADIENT */}
+        <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+        {/* TEXT OVERLAY */}
+        <div className="absolute bottom-3 left-0 w-full text-center px-2">
+          <h3 className="text-white text-lg md:text-xl font-medium tracking-wide">
+            {item.firstName} {item.lastName}
           </h3>
-          <div className="mt-1">
-            <h4 className="text-[1.2rem] font-bold text-white uppercase leading-tight line-clamp-2">
-              {item.firstName} {item.lastName}
-            </h4>
-            <p className="text-[0.6rem] text-white/90 uppercase font-semibold mt-0.5">
-              CERTIFIED {item.title} HEALER
-            </p>
-          </div>
-          <button className="mt-2 flex items-center gap-1 w-fit px-3 py-1.5 rounded-full bg-white/20 border border-white/70 text-white text-[0.65rem] font-bold uppercase backdrop-blur-sm transition-all hover:bg-white hover:text-purple-900 hover:scale-105">
-            Book A Session <ArrowRight size={12} />
-          </button>
+          <span className="text-gray-200 text-[10px] md:text-xs uppercase tracking-wider font-semibold">
+            {item.title}
+          </span>
         </div>
       </div>
 
-      {/* STATS BAR */}
-      <div className="bg-white border-y-2 border-black px-3 py-2 flex justify-between items-center text-[0.7rem] font-extrabold text-black uppercase tracking-wide">
-        <span>EXP: {item.exp} YEARS</span>
-        <span className="text-gray-300">|</span>
-        <span className="truncate max-w-[80px]" title={item.languages.join(' | ')}>
-          {item.languages.join(' | ')}
-        </span>
-        <span className="bg-[#53155b] text-white px-2 py-0.5 rounded flex items-center gap-1">
-          <Star size={10} fill="white" /> {item.rating}
-        </span>
+      {/* DIVIDER LINE */}
+      <hr className="border-t border-gray-300 mx-2 mb-2" />
+
+      {/* --- NEW SECTION: MODALITY PILLS --- */}
+      <div className={`flex flex-wrap gap-1 mb-2 ${isMobile ? "px-1" : "px-4"}`}>
+        {item.tags.slice(0, 3).map((tag, idx) => (
+          <span 
+            key={idx} 
+            className="px-2 py-0.5 text-[9px] md:text-[10px] rounded-md bg-white/60 text-gray-600 border border-gray-100 font-medium"
+          >
+            {tag}
+          </span>
+        ))}
       </div>
 
-      {/* FOOTER BODY */}
-      <div className="bg-[#fffbf5] p-4 flex-grow flex flex-col justify-between rounded-b-[23px]">
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {item.tags.map((tag, idx) => (
-            <span key={idx} className="border border-black rounded-full px-2.5 py-0.5 text-[0.65rem] font-bold text-black uppercase bg-transparent">
-              {tag}
-            </span>
-          ))}
+      {/* --- NEW SECTION: INFO ROW (Exp | Lang | Rating) --- */}
+      <div className={`flex items-center text-[10px] md:text-[11px] text-gray-500 font-medium mb-3 ${isMobile ? "px-1" : "px-4"}`}>
+        {/* Experience */}
+        <span className="whitespace-nowrap">Exp: {item.experience}</span>
+        
+        <span className="mx-2 text-gray-300">|</span>
+        
+        {/* Languages */}
+        <span className="uppercase truncate max-w-[60px]" title={item.languages.join(", ")}>
+            {item.languages.join(" | ")}
+        </span>
+
+        <span className="mx-2 text-gray-300">|</span>
+
+        {/* Rating */}
+        <div className="flex items-center text-amber-500">
+            <span className="mr-0.5 font-bold text-gray-700">{item.rating}</span>
+            <Star size={10} fill="currentColor" />
         </div>
-        <div className="relative flex justify-between items-center">
-          <div className="absolute left-1/2 top-[10%] bottom-[10%] w-[1px] bg-black"></div>
-          <div className="flex-1 flex flex-col">
-            <p className="text-[0.6rem] font-extrabold text-black uppercase">Duration</p>
-            <p className="text-[1.3rem] font-light text-black leading-none">{item.time}</p>
-          </div>
-          <div className="flex-1 flex flex-col items-end text-right">
-            <p className="text-[0.6rem] font-extrabold text-black uppercase">Price</p>
-            <p className="text-[1.3rem] font-light text-black leading-none">
-              {currencySymbol}{item.price} <span className="text-[0.65rem] font-semibold">ONWARDS</span>
-            </p>
-          </div>
+      </div>
+
+      {/* 2. BOTTOM INFO (Price & Button) */}
+      <div
+        className={`flex items-center justify-between mt-auto ${
+          isMobile ? "px-1 pb-1" : "px-4 pb-2"
+        }`}
+      >
+        {/* Price Section */}
+        <div className="flex flex-col">
+          <span className="text-[9px] md:text-[10px] text-gray-500 font-medium uppercase tracking-wide">
+            Starting from
+          </span>
+          <span className="text-base md:text-lg font-bold text-gray-800">
+            ₹{item.price}
+          </span>
         </div>
+
+        {/* Action Button */}
+        <button
+          className="px-4 py-1.5 md:px-5 md:py-1.5 rounded-full text-white text-xs md:text-sm font-medium shadow-md hover:shadow-lg hover:opacity-95 transform active:scale-95 transition-all
+          bg-gradient-to-r from-[#b09bd8] to-[#6f42c1]"
+        >
+          Book Now
+        </button>
       </div>
     </div>
   );
 };
 
-
-// --- 3. MAIN LISTING COMPONENT ---
+// --- 3. MAIN COMPONENT ---
 function HealerList() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6); // Default desktop
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsPerPageDesktop = 4;
+  const scrollStep = 2; // SCROLL BY 2 ITEMS
 
-  // Handle Resize logic for Pagination (2 for Mobile, 6 for Desktop)
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setItemsPerPage(2);
-      } else {
-        setItemsPerPage(6);
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const maxIndex = dummyHealers.length - itemsPerPageDesktop;
 
-  const totalPages = Math.ceil(dummyHealers.length / itemsPerPage);
+  // Desktop Navigation Handlers
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - scrollStep, 0));
+  };
 
-  // Ensure current page is valid on resize
-  useEffect(() => {
-    if (currentPage > totalPages) setCurrentPage(1);
-  }, [itemsPerPage, totalPages, currentPage]);
+  const handleNext = () => {
+    setCurrentIndex((prev) => Math.min(prev + scrollStep, maxIndex));
+  };
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = dummyHealers.slice(indexOfFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const navButtonStyle = `absolute top-1/2 -translate-y-1/2 z-20 flex items-center justify-center w-12 h-12 rounded-full bg-gray-100/90 backdrop-blur-sm border border-gray-200 shadow-sm text-gray-600 transition-all active:scale-95`;
 
   return (
-    <div className='min-h-screen  mt-10 pb-12 font-sans'>
-      
-      <div className="container mx-auto px-4 max-w-7xl">
-        
-        {/* --- HEADING SECTION --- */}
-        <div className="text-center mb-6">
-          <h2 className="text-xl md:text-3xl font-light text-gray-800 uppercase tracking-widest">
-             Meet Your Guiding Lights
+    <div className="mt-10 pb-12 bg-white min-h-[500px] relative border-b border-gray-200">
+      <div className="container mx-auto px-4 md:px-24 max-w-[1400px] relative">
+        {/* HEADING */}
+        <div className="text-center mb-8 md:mb-10">
+          <h2 className="text-xl md:text-4xl font-normal text-gray-800 uppercase tracking-wider">
+            Meet Your Guiding Lights
           </h2>
-          <div className="w-24 h-1 bg-[#b09bd8] mx-auto mt-4 rounded-full"></div>
+          {/* Subheading Added */}
+          <p className="text-gray-500 text-sm md:text-lg mt-2 font-light">
+            Connect with certified healers worldwide
+          </p>
+          <div className="w-16 md:w-24 h-1 bg-[#b09bd8] mx-auto mt-4 rounded-full"></div>
         </div>
 
-        {/* HEALER GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
-          {currentItems.map((healer) => (
-            <HealerCard key={healer.id} item={healer} />
-          ))}
+        {/* --- DESKTOP SLIDER CONTROLS --- */}
+        <div className="hidden md:block">
+          <button
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
+            className={`${navButtonStyle} left-6 ${
+              currentIndex === 0
+                ? "opacity-40 cursor-not-allowed"
+                : "hover:bg-gray-200 hover:shadow-md"
+            }`}
+          >
+            <ChevronLeft size={24} />
+          </button>
+
+          <button
+            onClick={handleNext}
+            disabled={currentIndex >= maxIndex}
+            className={`${navButtonStyle} right-6 ${
+              currentIndex >= maxIndex
+                ? "opacity-40 cursor-not-allowed"
+                : "hover:bg-gray-200 hover:shadow-md"
+            }`}
+          >
+            <ChevronRight size={24} />
+          </button>
         </div>
 
-        {/* --- CUSTOM PAGINATION --- */}
-        {totalPages > 1 && (
-          <div className="flex justify-center">
-            <nav>
-              <ul className="flex list-none rounded-md -space-x-px shadow-sm">
-                
-                {/* PREVIOUS BUTTON */}
-                <li>
-                  <button 
-                    onClick={() => paginate(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className={`
-                      relative block px-4 py-3 border text-sm font-medium rounded-l-md transition-colors duration-150
-                      ${currentPage === 1 
-                        ? 'bg-white text-gray-300 border-gray-300 cursor-not-allowed' 
-                        : 'bg-white text-[#b09bd8] border-gray-300 hover:bg-[#b09bd8] hover:text-white hover:z-10'}
-                    `}
-                  >
-                    <span>&larr;</span>
-                  </button>
-                </li>
-
-                {/* NUMBERED BUTTONS */}
-                {[...Array(totalPages)].map((_, idx) => {
-                  const pageNum = idx + 1;
-                  const isActive = currentPage === pageNum;
-                  return (
-                    <li key={pageNum}>
-                      <button 
-                        onClick={() => paginate(pageNum)}
-                        className={`
-                          relative block px-5 py-3 border text-sm font-medium transition-colors duration-150
-                          ${isActive 
-                            ? 'bg-[#b09bd8] text-white border-[#b09bd8] z-20' 
-                            : 'bg-white text-[#b09bd8] border-gray-300 hover:bg-[#b09bd8] hover:text-white hover:z-10'}
-                        `}
-                      >
-                        {pageNum}
-                      </button>
-                    </li>
-                  );
-                })}
-
-                {/* NEXT BUTTON */}
-                <li>
-                  <button 
-                    onClick={() => paginate(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className={`
-                      relative block px-4 py-3 border text-sm font-medium rounded-r-md transition-colors duration-150
-                      ${currentPage === totalPages 
-                        ? 'bg-white text-gray-300 border-gray-300 cursor-not-allowed' 
-                        : 'bg-white text-[#b09bd8] border-gray-300 hover:bg-[#b09bd8] hover:text-white hover:z-10'}
-                    `}
-                  >
-                    <span>&rarr;</span>
-                  </button>
-                </li>
-
-              </ul>
-            </nav>
+        {/* --- CAROUSEL TRACK --- */}
+        <div className="relative overflow-hidden w-full">
+          {/* DESKTOP VIEW */}
+          {/* Increased height slightly to accommodate new info fields */}
+          <div
+            className="hidden md:flex transition-transform duration-700 ease-in-out"
+            style={{
+              transform: `translateX(-${
+                currentIndex * (100 / itemsPerPageDesktop)
+              }%)`,
+            }}
+          >
+            {dummyHealers.map((healer) => (
+              <div key={healer.id} className="w-1/4 shrink-0 px-4 h-[440px] mb-4">
+                <HealerCard item={healer} isMobile={false} />
+              </div>
+            ))}
           </div>
-        )}
 
+          {/* MOBILE VIEW */}
+          <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-3 px-2 pb-6 scrollbar-hide">
+            {dummyHealers.map((healer) => (
+              <div
+                key={healer.id}
+                className="min-w-[75%] snap-center h-[380px]"
+              >
+                <HealerCard item={healer} isMobile={true} />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
+
+      <style>{`
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </div>
-  )
+  );
 }
 
 export default HealerList;
