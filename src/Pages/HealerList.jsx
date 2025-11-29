@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
-// --- 1. UPDATED DUMMY DATA ---
 // Added experience and languages to match your real data requirements
 const dummyHealers = [
   {
@@ -108,6 +107,58 @@ const dummyHealers = [
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600",
     tags: ["Goals", "Success Mindset"],
   },
+  {
+    id: 9,
+    firstName: "John",
+    lastName: "Doe",
+    title: "Life Coaching",
+    price: "5000",
+    rating: "4.8",
+    experience: "7 Years",
+    languages: ["ENG"],
+    image:
+      "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=600",
+    tags: ["Vibration", "Deep Sleep"],
+  },
+  {
+    id: 10,
+    firstName: "John",
+    lastName: "Doe",
+    title: "Life Coaching",
+    price: "5000",
+    rating: "4.8",
+    experience: "7 Years",
+    languages: ["ENG"],
+    image:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=600",
+    tags: ["Stress Relief", "Anxiety", "Chakra"],
+  },
+  {
+    id: 11,
+    firstName: "John",
+    lastName: "Doe",
+    title: "Life Coaching",
+    price: "5000",
+    rating: "4.8",
+    experience: "7 Years",
+    languages: ["ENG"],
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600",
+    tags: ["Goals", "Success Mindset"],
+  },
+  {
+    id: 12,
+    firstName: "John",
+    lastName: "Doe",
+    title: "Life Coaching",
+    price: "5000",
+    rating: "4.8",
+    experience: "7 Years",
+    languages: ["ENG"],
+    image:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=600",
+    tags: ["Stress Relief", "Anxiety", "Chakra"],
+  },
 ];
 
 // --- 2. HEALER CARD COMPONENT ---
@@ -147,10 +198,12 @@ const HealerCard = ({ item, isMobile }) => {
       <hr className="border-t border-gray-300 mx-2 mb-2" />
 
       {/* --- NEW SECTION: MODALITY PILLS --- */}
-      <div className={`flex flex-wrap gap-1 mb-2 ${isMobile ? "px-1" : "px-4"}`}>
+      <div
+        className={`flex flex-wrap gap-1 mb-2 ${isMobile ? "px-1" : "px-4"}`}
+      >
         {item.tags.slice(0, 3).map((tag, idx) => (
-          <span 
-            key={idx} 
+          <span
+            key={idx}
             className="px-2 py-0.5 text-[9px] md:text-[10px] rounded-md bg-white/60 text-gray-600 border border-gray-100 font-medium"
           >
             {tag}
@@ -159,23 +212,30 @@ const HealerCard = ({ item, isMobile }) => {
       </div>
 
       {/* --- NEW SECTION: INFO ROW (Exp | Lang | Rating) --- */}
-      <div className={`flex items-center text-[10px] md:text-[11px] text-gray-500 font-medium mb-3 ${isMobile ? "px-1" : "px-4"}`}>
+      <div
+        className={`flex items-center text-[10px] md:text-[11px] text-gray-500 font-medium mb-3 ${
+          isMobile ? "px-1" : "px-4"
+        }`}
+      >
         {/* Experience */}
         <span className="whitespace-nowrap">Exp: {item.experience}</span>
-        
+
         <span className="mx-2 text-gray-300">|</span>
-        
+
         {/* Languages */}
-        <span className="uppercase truncate max-w-[60px]" title={item.languages.join(", ")}>
-            {item.languages.join(" | ")}
+        <span
+          className="uppercase truncate max-w-[60px]"
+          title={item.languages.join(", ")}
+        >
+          {item.languages.join(" | ")}
         </span>
 
         <span className="mx-2 text-gray-300">|</span>
 
         {/* Rating */}
         <div className="flex items-center text-amber-500">
-            <span className="mr-0.5 font-bold text-gray-700">{item.rating}</span>
-            <Star size={10} fill="currentColor" />
+          <span className="mr-0.5 font-bold text-gray-700">{item.rating}</span>
+          <Star size={10} fill="currentColor" />
         </div>
       </div>
 
@@ -212,6 +272,28 @@ function HealerList() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerPageDesktop = 4;
   const scrollStep = 2; // SCROLL BY 2 ITEMS
+  const [activeCard, setActiveCard] = useState(null);
+
+  const cardRefs = useRef([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveCard(entry.target.dataset.id);
+          }
+        });
+      },
+      {
+        root: document.querySelector("#mobile-scroll"),
+        threshold: 0.6, // when 60% of card is visible, mark as active
+      }
+    );
+
+    cardRefs.current.forEach((ref) => ref && observer.observe(ref));
+    return () => observer.disconnect();
+  }, []);
 
   const maxIndex = dummyHealers.length - itemsPerPageDesktop;
 
@@ -228,7 +310,7 @@ function HealerList() {
 
   return (
     <div className="mt-10 pb-12 bg-white min-h-[500px] relative border-b border-gray-200">
-      <div className="container mx-auto px-4 md:px-24 max-w-[1400px] relative">
+      <div className=" mx-auto  md:px-24 max-w-[1400px] relative">
         {/* HEADING */}
         <div className="text-center mb-8 md:mb-10">
           <h2 className="text-xl md:text-4xl font-normal text-gray-800 uppercase tracking-wider">
@@ -281,18 +363,37 @@ function HealerList() {
             }}
           >
             {dummyHealers.map((healer) => (
-              <div key={healer.id} className="w-1/4 shrink-0 px-4 h-[440px] mb-4">
+              <div
+                key={healer.id}
+                className="w-1/4 shrink-0 px-4 h-[440px] mb-4"
+              >
                 <HealerCard item={healer} isMobile={false} />
               </div>
             ))}
           </div>
 
           {/* MOBILE VIEW */}
-          <div className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-3 px-2 pb-6 scrollbar-hide">
-            {dummyHealers.map((healer) => (
+          <div
+            id="mobile-scroll"
+            className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-3 px-2 pb-6 scrollbar-hide"
+          >
+            {dummyHealers.map((healer, idx) => (
               <div
                 key={healer.id}
-                className="min-w-[75%] snap-center h-[380px]"
+                data-id={healer.id}
+                ref={(el) => (cardRefs.current[idx] = el)}
+                className={`
+        min-w-[75%] snap-center h-[380px] transition-all duration-300
+        ${
+          activeCard == healer.id
+            ? "opacity-100 scale-100 rounded-xl"
+            : "opacity-60 scale-90 rounded-3xl"
+        }
+      `}
+                style={{
+                  transform:
+                    activeCard == healer.id ? "scale(1)" : "scale(0.9)",
+                }}
               >
                 <HealerCard item={healer} isMobile={true} />
               </div>

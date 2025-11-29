@@ -336,7 +336,7 @@ export default function Hero() {
         </div>
 
         {/* MOBILE: animated rounded/fade effect */}
-        <div className="md:hidden w-full pl-2">
+        <div className="md:hidden w-full ">
           <div
             ref={mobileRef}
             className="flex overflow-x-auto gap-4 pb-6 snap-x snap-mandatory pr-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
